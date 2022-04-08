@@ -1,10 +1,10 @@
-import re
+import requests
 import time
 import os
 import sys
 from json import dumps, loads, load
 from dotenv import load_dotenv
-from mirrserver.work_server import get_job
+# from mirrserver.work_server import get_job
 import requests
 from requests.exceptions import ConnectionError as RequestConnectionError
 from requests.exceptions import HTTPError, RequestException
@@ -116,6 +116,7 @@ class TempClient:
         
 
     def get_job(self):
+        print('performing job')
         response = self.server_validator.get_request('/get_job')
         job = loads(response.text)
         if 'error' in job:
@@ -161,6 +162,7 @@ if __name__ == '__main__':
     api_validator = Validator()
     server_validator = ServerValidator(f'http://{work_server_hostname}:{work_server_port}')
     client = TempClient(server_validator, api_validator)
+    client.get_id()
 
     print('Your ID is: ', client.id)
     while True:
