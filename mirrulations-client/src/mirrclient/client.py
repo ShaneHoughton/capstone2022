@@ -155,12 +155,17 @@ if __name__ == '__main__':
     if not is_environment_variables_present():
         print('Need client environment variables')
         sys.exit(1)
-    client = Client()
-    client.get_client_id()
-    print('Your ID is: ', client.client_id)
+    work_server_hostname = os.getenv('WORK_SERVER_HOSTNAME')
+    work_server_port = os.getenv('WORK_SERVER_PORT')
+
+    api_validator = Validator()
+    server_validator = ServerValidator(f'http://{work_server_hostname}:{work_server_port}')
+    client = TempClient(server_validator, api_validator)
+
+    print('Your ID is: ', client.id)
     while True:
         try:
-            client.execute_task()
+            client.job_operation()
         except NoJobsAvailableException:
             print("No Jobs Available")
         time.sleep(3.6)
